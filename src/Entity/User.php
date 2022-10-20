@@ -79,7 +79,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setRoles(array $roles): self
     {
-        $this->roles = $roles;
+        $this->roles = [];
+
+        foreach ($roles as $role) {
+            array_push($this->roles, $role);
+        }
 
         return $this;
     }
