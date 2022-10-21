@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Task;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'user')]
@@ -65,6 +69,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
+    public function getSalt() {}
+
     /**
      * @see UserInterface
      */
@@ -79,10 +85,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setRoles(array $roles): self
     {
-        $this->roles = [];
+        $this->roles = ['ROLE_USER'];
 
         foreach ($roles as $role) {
-            array_push($this->roles, $role);
+            if ($role !== 'ROLE_USER') {
+                array_push($this->roles, $role);
+            }
         }
 
         return $this;
@@ -98,7 +106,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setPassword(string $password): self
     {
-        $this->password = $password;
+        $passwordHasherFactory = new PasswordHasherFactory([
+            User::class => [
+                'algorithm' => 'auto'
+            ],
+            PasswordAuthenticatedUserInterface::class => [
+                'algorithm' => 'auto',
+                'cost' => 15,
+            ],
+        ]);
+
+        $passwordHasher = new UserPasswordHasher($passwordHasherFactory);
+        $hashedPassword = $passwordHasher->hashPassword($this, $password);
+        $this->password = $hashedPassword;
 
         return $this;
     }

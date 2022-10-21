@@ -3,16 +3,18 @@
 {% block title %}Liste des tâches{% endblock %}
 
 {% block body %}
-    {% if app.user %}
-        <a href="{{ path('app_task_new') }}" class="btn btn-dark pull-right mb-3">
-            <i class="bi bi-plus-lg"></i>
-            Créer une tâche
-        </a>
-    {% endif %}
     <div class="row">
+        <div class="title-container">
+            <h1>Liste des tâches</h1>
+            {% if app.user %}
+                <a href="{{ path('app_task_new') }}" class="btn btn-dark pull-right mb-3">
+                    <i class="bi bi-plus-lg"></i>
+                    Créer une tâche
+                </a>
+            {% endif %}
+        </div>
         {% for task in tasks %}
         <div class="col-sm-4 col-lg-4 col-md-4">
-
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">

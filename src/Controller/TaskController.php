@@ -56,6 +56,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_task_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function edit(Request $request, Task $task, TaskRepository $taskRepository): Response
     {
         $form = $this->createForm(TaskType::class, $task);
@@ -76,6 +77,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/toggle', name: 'app_task_toggle', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function toggleTaskAction(Task $task, TaskRepository $taskRepository)
     {
         $task->setIsDone(!$task->getIsDone());
@@ -87,6 +89,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_task_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function delete(Request $request, Task $task, TaskRepository $taskRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {

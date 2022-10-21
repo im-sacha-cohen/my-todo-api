@@ -3,7 +3,13 @@
 {% block title %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
-    <h1>Liste des utilisateurs</h1>
+    <div class="title-container">
+        <h1>Liste des utilisateurs</h1>
+        <a href="{{ path('app_user_new') }}" class="btn btn-dark pull-right mb-3">
+            <i class="bi bi-person-plus-fill"></i>
+            Créer un utilisateur
+        </a>
+    </div>
 
     <table class="table">
         <thead>
