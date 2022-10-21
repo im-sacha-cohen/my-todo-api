@@ -88,14 +88,30 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('app_task_index');
     }
 
-    #[Route('/{id}', name: 'app_task_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_task_delete', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function delete(Request $request, Task $task, TaskRepository $taskRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
-            $taskRepository->remove($task, true);
+        $isTaskAnonymous = $task->getUser()->hasRole('ROLE_ANONYMOUS');
+        $adminCanDeleteAnonymousTask = $isTaskAnonymous && $this->isGranted('ROLE_ADMIN');
+        $taskOwnedByCurrentUser = $task->getUser() === $this->getUser();
 
-            $this->addFlash('success', 'La tâche a bien été supprimée.');
+        // The task should be owned by the user that wrote it
+        // And the task should not be owner by an anonymous user
+        if (
+            !$taskOwnedByCurrentUser &&
+            !$adminCanDeleteAnonymousTask
+        ) {
+            $this->addFlash('error', 'Vous ne pouvez pas supprimer cette tâche car vous n\'êtes pas le propriétaire.');
+        } else if (
+            $task->getUser() === $this->getUser() ||
+            $adminCanDeleteAnonymousTask
+        ) {
+            if ($this->isCsrfTokenValid('delete'.$task->getId(), $request->request->get('_token'))) {
+                $taskRepository->remove($task, true);
+
+                $this->addFlash('success', 'La tâche a bien été supprimée.');
+            }
         }
 
         return $this->redirectToRoute('app_task_index', [], Response::HTTP_SEE_OTHER);

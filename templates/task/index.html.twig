@@ -28,6 +28,10 @@
                     </h5>
                     <h6 class="card-subtitle mb-2 text-muted">
                         {% if task.isDone %}Terminée{% else %}Pas encore terminée{% endif %}
+                        {% if app.user and task.user.id == app.user.id %}
+                            <br/>
+                            <small>Créée par vous</small>
+                        {% endif %}
                     </h6>
                     <p class="card-text">
                         {{ task.content }}
@@ -38,7 +42,8 @@
                                 {% if not task.isDone %}<i class="bi bi-check-lg"></i> Marquer comme faite{% else %}<i class="bi bi-x-lg"></i> Marquer non terminée{% endif %}
                             </button>
                         </form>
-                        <form action="{{ path('app_task_delete', {'id' : task.id }) }}">
+                        <form method="POST" action="{{ path('app_task_delete', {'id': task.id}) }}" onsubmit="return confirm('Souhaitez-vous réellement supprimer cette tâche ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
                             <button class="btn btn-danger btn-sm pull-right col-12">
                                 <i class="bi bi-trash-fill"></i>
                                 Supprimer
