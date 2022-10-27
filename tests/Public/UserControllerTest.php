@@ -12,7 +12,7 @@ class UserControllerTest extends WebTestCase
     public function testUserIndex() {
         $client = static::createClient();
         $client->request('GET', '/user');
-        $this->assertResponseIsSuccessful();
+        $this->assertResponseRedirects('/login');
     }
 
     /**
