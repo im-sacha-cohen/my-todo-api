@@ -6,6 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HomeTest extends WebTestCase
 {
+    /**
+     * @covers App\Controller\HomeController::index
+     */
     public function testHeaderWhenLoggedOut(): void
     {
         $client = static::createClient();
