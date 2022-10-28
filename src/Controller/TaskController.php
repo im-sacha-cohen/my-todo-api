@@ -29,7 +29,7 @@ class TaskController extends AbstractController
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $task->setCreatedAt(date_create())
                 ->setUser($this->getUser())
@@ -44,14 +44,6 @@ class TaskController extends AbstractController
         return $this->renderForm('task/new.html.twig', [
             'task' => $task,
             'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_task_show', methods: ['GET'])]
-    public function show(Task $task): Response
-    {
-        return $this->render('task/show.html.twig', [
-            'task' => $task,
         ]);
     }
 
@@ -76,14 +68,14 @@ class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/tasks/{id}/toggle', name: 'app_task_toggle', methods: ['GET', 'POST'])]
+    #[Route('/{id}/toggle', name: 'app_task_toggle', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function toggleTaskAction(Task $task, TaskRepository $taskRepository)
     {
         $task->setIsDone(!$task->getIsDone());
         $taskRepository->add($task, true);
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        $this->addFlash('success', sprintf('La tâche a bien changé d\état !', $task->getTitle()));
 
         return $this->redirectToRoute('app_task_index');
     }
@@ -95,7 +87,7 @@ class TaskController extends AbstractController
         $isTaskAnonymous = $task->getUser()->hasRole('ROLE_ANONYMOUS');
         $adminCanDeleteAnonymousTask = $isTaskAnonymous && $this->isGranted('ROLE_ADMIN');
         $taskOwnedByCurrentUser = $task->getUser() === $this->getUser();
-
+        
         // The task should be owned by the user that wrote it
         // And the task should not be owner by an anonymous user
         if (

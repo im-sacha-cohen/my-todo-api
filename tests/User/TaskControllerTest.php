@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Admin;
+namespace App\Tests\User;
 
 use App\Entity\Task;
 use App\Tests\Admin\AbstractAdmin;
@@ -20,7 +20,7 @@ class TaskControllerTest extends AbstractAdmin
         $token = $crawler->filter('input[name="task[_token]"]')->extract(array('value'))[0];
         
         $task['task']['title'] = 'Test task';
-        $task['task']['content'] = 'My ID should be equal to 1';
+        $task['task']['content'] = 'My ID should be equal to 2';
         $task['task']['_token'] = $token;
 
         $crawler = $client->request('POST', '/task/new', $task);
@@ -38,16 +38,16 @@ class TaskControllerTest extends AbstractAdmin
         $client = static::createClient();
         
         $this->loginAdminUser($client);
-        $crawler = $client->request('GET', '/task/1/edit');
+        $crawler = $client->request('GET', '/task/2/edit');
         $this->assertResponseIsSuccessful();
         
         $token = $crawler->filter('input[name="task[_token]"]')->extract(array('value'))[0];
         
         $task['task']['title'] = 'Test task edited';
-        $task['task']['content'] = 'My ID is equal to 1';
+        $task['task']['content'] = 'My ID is equal to 2';
         $task['task']['_token'] = $token;
 
-        $crawler = $client->request('POST', '/task/1/edit', $task);
+        $crawler = $client->request('POST', '/task/2/edit', $task);
     
         $this->assertResponseHasHeader('Location');
         $crawler = $client->followRedirect();
@@ -63,7 +63,7 @@ class TaskControllerTest extends AbstractAdmin
         
         $this->loginAdminUser($client);
         
-        $crawler = $client->request('GET', '/task/1/toggle');
+        $crawler = $client->request('GET', '/task/2/toggle');
     
         $this->assertResponseHasHeader('Location');
         $crawler = $client->followRedirect();
@@ -84,7 +84,7 @@ class TaskControllerTest extends AbstractAdmin
         
         $task['_token'] = $token;
 
-        $crawler = $client->request('POST', '/task/1/delete', $task);
+        $crawler = $client->request('POST', '/task/2/delete', $task);
     
         $this->assertResponseHasHeader('Location');
         $crawler = $client->followRedirect();
