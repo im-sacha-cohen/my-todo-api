@@ -4,6 +4,7 @@ namespace App\Tests\User;
 
 use App\Entity\Task;
 use App\Tests\User\AbstractUser;
+use App\Repository\TaskRepository;
 
 class TaskControllerTest extends AbstractUser
 {
@@ -19,7 +20,7 @@ class TaskControllerTest extends AbstractUser
         
         $token = $crawler->filter('input[name="task[_token]"]')->extract(array('value'))[0];
         
-        $task['task']['title'] = 'Test task';
+        $task['task']['title'] = 'Test task 2';
         $task['task']['content'] = 'My ID should be equal to 2';
         $task['task']['_token'] = $token;
 
@@ -38,16 +39,21 @@ class TaskControllerTest extends AbstractUser
         $client = static::createClient();
         
         $this->loginUser($client);
-        $crawler = $client->request('GET', '/task/2/edit');
+
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+        $taskObject = $taskRepository->findOneBy(['title' => 'Test task 2']);
+        $taskId = $taskObject->getId();
+
+        $crawler = $client->request('GET', "/task/$taskId/edit");
         $this->assertResponseIsSuccessful();
         
         $token = $crawler->filter('input[name="task[_token]"]')->extract(array('value'))[0];
         
-        $task['task']['title'] = 'Test task edited';
+        $task['task']['title'] = 'Test task 2 edited';
         $task['task']['content'] = 'My ID is equal to 2';
         $task['task']['_token'] = $token;
 
-        $crawler = $client->request('POST', '/task/2/edit', $task);
+        $crawler = $client->request('POST', "/task/$taskId/edit", $task);
     
         $this->assertResponseHasHeader('Location');
         $crawler = $client->followRedirect();
@@ -62,8 +68,12 @@ class TaskControllerTest extends AbstractUser
         $client = static::createClient();
         
         $this->loginUser($client);
+
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+        $taskObject = $taskRepository->findOneBy(['title' => 'Test task 2 edited']);
+        $taskId = $taskObject->getId();
         
-        $crawler = $client->request('GET', '/task/2/toggle');
+        $crawler = $client->request('GET', "/task/$taskId/toggle");
     
         $this->assertResponseHasHeader('Location');
         $crawler = $client->followRedirect();
@@ -79,12 +89,16 @@ class TaskControllerTest extends AbstractUser
         
         $this->loginUser($client);
         $crawler = $client->request('GET', '/task');
+
+        $taskRepository = static::getContainer()->get(TaskRepository::class);
+        $taskObject = $taskRepository->findOneBy(['title' => 'Test task 2 edited']);
+        $taskId = $taskObject->getId();
         
         $token = $crawler->filter('input[name="_token"]')->extract(array('value'))[0];
         
         $task['_token'] = $token;
 
-        $crawler = $client->request('POST', '/task/2/delete', $task);
+        $crawler = $client->request('POST', "/task/$taskId/delete", $task);
     
         $this->assertResponseHasHeader('Location');
         $crawler = $client->followRedirect();
