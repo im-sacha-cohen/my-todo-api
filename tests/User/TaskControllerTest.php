@@ -3,9 +3,9 @@
 namespace App\Tests\User;
 
 use App\Entity\Task;
-use App\Tests\Admin\AbstractAdmin;
+use App\Tests\User\AbstractUser;
 
-class TaskControllerTest extends AbstractAdmin
+class TaskControllerTest extends AbstractUser
 {
     /**
      * @covers App\Controller\TaskController::new
@@ -13,7 +13,7 @@ class TaskControllerTest extends AbstractAdmin
     public function testTaskNew() {
         $client = static::createClient();
         
-        $this->loginAdminUser($client);
+        $this->loginUser($client);
         $crawler = $client->request('GET', '/task/new');
         $this->assertResponseIsSuccessful();
         
@@ -37,7 +37,7 @@ class TaskControllerTest extends AbstractAdmin
     public function testTaskEdit() {
         $client = static::createClient();
         
-        $this->loginAdminUser($client);
+        $this->loginUser($client);
         $crawler = $client->request('GET', '/task/2/edit');
         $this->assertResponseIsSuccessful();
         
@@ -61,7 +61,7 @@ class TaskControllerTest extends AbstractAdmin
     public function testTaskToggle() {
         $client = static::createClient();
         
-        $this->loginAdminUser($client);
+        $this->loginUser($client);
         
         $crawler = $client->request('GET', '/task/2/toggle');
     
@@ -77,7 +77,7 @@ class TaskControllerTest extends AbstractAdmin
     public function testTaskDelete() {
         $client = static::createClient();
         
-        $this->loginAdminUser($client);
+        $this->loginUser($client);
         $crawler = $client->request('GET', '/task');
         
         $token = $crawler->filter('input[name="_token"]')->extract(array('value'))[0];

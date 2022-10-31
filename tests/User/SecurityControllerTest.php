@@ -2,16 +2,16 @@
 
 namespace App\Tests\User;
 
-use App\Tests\Admin\AbstractAdmin;
+use App\Tests\User\AbstractUser;
 
-class SecurityControllerTest extends AbstractAdmin
+class SecurityControllerTest extends AbstractUser
 {
     /**
      * @covers App\Controller\SecurityController::login
      */
     public function testAdminLogin() {
         $client = static::createClient();
-        $this->loginAdminUser($client);
+        $this->loginUser($client);
 
         $client->request('GET', '/task');
         $this->assertResponseIsSuccessful();
