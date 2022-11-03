@@ -11,6 +11,26 @@ class SecurityControllerTest extends AbstractAdmin
      */
     public function testAdminLogin() {
         $client = static::createClient();
+        $crawler = $client->request('GET', '/login');
+        $this->assertResponseIsSuccessful();
+
+        $token = $crawler->filter('input[name="_csrf_token"]')->extract(array('value'))[0];
+        
+        $login['email'] = 'aa@todo.fr';
+        $login['password'] = 'a';
+        $login['_csrf_token'] = $token;
+        
+        $crawler = $client->request('POST', "/login", $login);
+
+        $this->assertResponseHasHeader('Location');
+        $this->assertResponseRedirects('/task');
+    }
+
+    /**
+     * @covers App\Controller\HomeController::index
+     */
+    public function testAdminIndex() {
+        $client = static::createClient();
         $this->loginAdminUser($client);
 
         $client->request('GET', '/task');

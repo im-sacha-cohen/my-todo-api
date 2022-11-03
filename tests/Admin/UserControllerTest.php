@@ -8,6 +8,17 @@ use App\Tests\Admin\AbstractAdmin;
 class UserControllerTest extends AbstractAdmin
 {
     /**
+     * @covers App\Controller\UserController::index
+     */
+    public function testUserIndex() {
+        $client = static::createClient();
+        
+        $this->loginAdminUser($client);
+        $crawler = $client->request('GET', '/user');
+        $this->assertResponseIsSuccessful();
+    }
+
+    /**
      * @covers App\Controller\UserController::new
      */
     public function testUserNew() {
@@ -50,7 +61,7 @@ class UserControllerTest extends AbstractAdmin
         
         $token = $crawler->filter('input[name="user[_token]"]')->extract(array('value'))[0];
         
-        $user['user']['email'] = 'test-update@todo.fr';
+        $user['user']['email'] = 'contact@sacha-cohen.fr';
         $user['user']['username'] = 'Test user';
         $user['user']['password']['first'] = '123456';
         $user['user']['password']['second'] = '123456';
@@ -74,7 +85,7 @@ class UserControllerTest extends AbstractAdmin
         $this->loginAdminUser($client);
 
         $userRepository = static::getContainer()->get(UserRepository::class);
-        $userObject = $userRepository->findOneBy(['email' => 'test-update@todo.fr']);
+        $userObject = $userRepository->findOneBy(['email' => 'contact@sacha-cohen.fr']);
         $userId = $userObject->getId();
 
         $crawler = $client->request('GET', "/user/$userId/edit");
