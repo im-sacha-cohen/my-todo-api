@@ -27,13 +27,9 @@ MAILER_DSN=smtp://user%password@shost:465
 ```
 You should start a MySQL server to let the next setps working.
 
-Then, in a terminal
+Then, in a terminal in the project folder
 ```sh
-cd todo-and-co
-composer install
-
-php bin/console make:db
-symfony serve
+composer install -n && php bin/console make:db && symfony serve
 ```
 The _"php bin/console make:db"_ script command will drop the database (if exists), create a new one, update the schema and load the fixtures.
 
