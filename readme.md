@@ -19,7 +19,7 @@ Todo & Co requires [PHP](https://php.net) 8.0.1 to run.
 You have to create a _.env_ file in current folder with your parameters
 ```sh
 APP_ENV=dev
-APP_SECRET=
+APP_SECRET=20bfad20186829f03dbfb047c621fc75
 
 DATABASE_URL="mysql://root:password@127.0.0.1:3306/todo-and-co?serverVersion=5.7"
 
