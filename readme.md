@@ -8,7 +8,7 @@
 
 ### Tech
 
-Todo & Co uses tehcnologies below :
+Todo & Co uses technologies below :
 
 - PHP with Symfony & MySQL
 
@@ -16,7 +16,6 @@ Todo & Co uses tehcnologies below :
 
 Todo & Co requires [PHP](https://php.net) 8.0.1 to run.
 
-Install the bundles
 You have to create a _.env_ file in current folder with your parameters
 ```sh
 APP_ENV=dev

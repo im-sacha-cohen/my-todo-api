@@ -56,7 +56,7 @@ class MakeDB extends Command
                
                $loadFixtures = shell_exec('php bin/console d:f:l --append');
                // This is the result of the command when the fixtures are successfully loaded. If something changes into the string, the condition will be false
-               $responseOnSuccessFixtures =  "\n   > loading App\DataFixtures\AppFixtures\n";
+               $responseOnSuccessFixtures =  "\n   > loading App\DataFixtures\UserFixture\n";
 
                if ($loadFixtures == $responseOnSuccessFixtures || $loadFixtures !== null && !$loadFixtures) {
                 $output->writeln('<info>The fixtures have been successfully loaded !</info>');
