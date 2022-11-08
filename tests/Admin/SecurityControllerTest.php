@@ -16,7 +16,7 @@ class SecurityControllerTest extends AbstractAdmin
 
         $token = $crawler->filter('input[name="_csrf_token"]')->extract(array('value'))[0];
         
-        $login['email'] = 'aa@todo.fr';
+        $login['email'] = 'user@todo.fr';
         $login['password'] = 'a';
         $login['_csrf_token'] = $token;
         
