@@ -14,7 +14,7 @@ class UserControllerTest extends AbstractAdmin
         $client = static::createClient();
         
         $this->loginAdminUser($client);
-        $crawler = $client->request('GET', '/user');
+        $client->request('GET', '/user');
         $this->assertResponseIsSuccessful();
     }
 

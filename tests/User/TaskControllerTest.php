@@ -73,10 +73,10 @@ class TaskControllerTest extends AbstractUser
         $taskObject = $taskRepository->findOneBy(['title' => 'Test task 2 edited']);
         $taskId = $taskObject->getId();
         
-        $crawler = $client->request('GET', "/task/$taskId/toggle");
+        $client->request('GET', "/task/$taskId/toggle");
     
         $this->assertResponseHasHeader('Location');
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('.alert-success', 'La tâche a bien changé d\état !');
     }
