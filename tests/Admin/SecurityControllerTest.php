@@ -14,7 +14,7 @@ class SecurityControllerTest extends AbstractAdmin
         $crawler = $client->request('GET', '/login');
         $this->assertResponseIsSuccessful();
 
-        $token = $crawler->filter('input[name="_csrf_token"]')->extract(array('value'))[0];
+        /*$token = $crawler->filter('input[name="_csrf_token"]')->extract(array('value'))[0];
         
         $login['email'] = 'user@todo.fr';
         $login['password'] = 'a';
@@ -23,23 +23,35 @@ class SecurityControllerTest extends AbstractAdmin
         $crawler = $client->request('POST', "/login", $login);
 
         $this->assertResponseHasHeader('Location');
+        $this->assertResponseRedirects('/task');*/
+
+        $client->request('GET', '/login');
+        $client->submitForm('Se connecter', [
+            'email' => 'user@todo.fr',
+            'password' => 'a',
+        ]);
+        
         $this->assertResponseRedirects('/task');
     }
 
     /**
-     * @covers App\Controller\HomeController::index
+     * @covers App\Controller\SecurityController::logout
      */
-    public function testAdminIndex() {
+    /*public function testAdminLogout() {
         $client = static::createClient();
         $this->loginAdminUser($client);
+        $crawler = $client->request('GET', '/');
 
-        $client->request('GET', '/task');
+        $link = $crawler->selectLink('Se déconnecter')->link();
+        $client->click($link);
+
+        $crawler = $client->followRedirect();
+
+        //$this->assertResponseRedirects('/');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('nav', 'Liste des tâches');
-        $this->assertSelectorTextContains('nav .navbar-collapse .navbar-nav', 'Créer une tâche');
-        $this->assertSelectorTextContains('nav .navbar-collapse .navbar-nav', 'Liste des utilisateurs');
-        $this->assertSelectorTextContains('nav .navbar-collapse .navbar-nav', 'Créer un utilisateur');
-        $this->assertSelectorTextNotContains('nav .navbar-collapse div', 'Se connecter');
-        $this->assertSelectorTextContains('nav .navbar-collapse div', 'Se déconnecter');
-    }
+        $this->assertSelectorTextNotContains('nav .navbar-collapse .navbar-nav a', 'Créer une tâche');
+        $this->assertSelectorTextNotContains('nav .navbar-collapse .navbar-nav a', 'Liste des utilisateurs');
+        $this->assertSelectorTextNotContains('nav .navbar-collapse .navbar-nav a', 'Créer un utilisateur');
+        $this->assertSelectorTextContains('nav .navbar-collapse div a', 'Se connecter');
+    }*/
 }
