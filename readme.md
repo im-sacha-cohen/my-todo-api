@@ -30,7 +30,8 @@ MAILER_DSN=smtp://user%password@shost:465
 
 After, run in a terminal
 ```sh
-php bin/console make:db && symfony serve
+php bin/console make:db
+symfony serve
 ```
 The _"php bin/console make:db"_ script command will drop the database (if exists), create a new one, update the schema and load the fixtures.
 
