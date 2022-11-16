@@ -16,22 +16,25 @@ Todo & Co uses technologies below :
 
 Todo & Co requires [PHP](https://php.net) 8.0.1 to run.
 
-You have to create a _.env_ file in current folder with your parameters
+Then, in a terminal in the project folder
 ```sh
-APP_ENV=dev
-APP_SECRET=20bfad20186829f03dbfb047c621fc75
+composer install -n
+```
 
+Next, you have to replace the _.env_ file variables below by your details
+```sh
 DATABASE_URL="mysql://root:password@127.0.0.1:3306/todo-and-co?serverVersion=5.7"
 
 MAILER_DSN=smtp://user%password@shost:465
 ```
-You should start a MySQL server to let the next setps working.
 
-Then, in a terminal in the project folder
+After, run in a terminal
 ```sh
-composer install -n && php bin/console make:db && symfony serve
+php bin/console make:db && symfony serve
 ```
 The _"php bin/console make:db"_ script command will drop the database (if exists), create a new one, update the schema and load the fixtures.
+
+You should start a MySQL server to let the next setps working.
 
 You can now request _Todo & Co_ locally on http://localhost:[port]
 
