@@ -23,17 +23,19 @@ class MakeDB extends Command
         $hasErrorOnDelete = true;
         $output->writeln('<question>Try removing database...</question>');
         $removeDb = shell_exec('php bin/console d:d:d --force --if-exists');
+        $reg = preg_match_all('/:[0-9]*\/([a-zA-Z_-]*)/m', $_ENV['DATABASE_URL'], $m);
+        $dbName = $m[$reg - 1][1];
         
         // When database doesn't exist
         if (
-            $removeDb == "Database `todo-and-co` for connection named default doesn't exist. Skipped.\n"
+            $removeDb == "Database `$dbName` for connection named default doesn't exist. Skipped.\n"
         ) {
             shell_exec('php bin/console d:d:c');
             $hasErrorOnDelete = false;
         } else if (
             $removeDb !== null &&
             !$removeDb ||
-            $removeDb == "Dropped database `todo-and-co` for connection named default\n"
+            $removeDb == "Dropped database `$dbName` for connection named default\n"
         ) {
             $hasErrorOnDelete = false;
         }
